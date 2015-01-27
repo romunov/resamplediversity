@@ -5,7 +5,6 @@
 \usepackage[T1]{fontenc}
 \usepackage{hyperref} 
 \usepackage{pdfpages} 
-\usepackage{Sweave}
 \begin{document} 
 \includepdf[pages=-, fitpaper = true]{vignette-source.pdf} 
 \end{document} 

@@ -7,7 +7,7 @@
             pdfborder = 0 0 0,
             citecolor = red]{hyperref}
 \usepackage{rotating}
-\SweaveOpts{out.width = "\\maxwidth", size = "footnotesize"} 
+\SweaveOpts{out.width = "\\maxwidth", size = "footnotesize", comment = NA} 
 
 \makeatletter
 \def\maxwidth{ %
@@ -23,6 +23,8 @@
 \author{Tomaž Skrbinšek}
 \date{\today}
 
+\parindent=0pt % no indent throught the document
+
 \begin{document}
 
 \maketitle
@@ -30,35 +32,45 @@
 % setup chunk for knitr
 <<echo=FALSE>>=
 options(width = 60) 
+options("digits" = 2)
 pdf.options(encoding = "CP1250")
+rm(list=ls())
 #setwd("./resamplediversity/manual_vignette")
 load("bine.RData")
 source("../R/functions.R")
 library(xtable)
 @
 
-This vignette documents workflow from our paper^{\cite{skrbinsek2012}}.
+This vignette documents workflow and results from our paper^{\cite{skrbinsek2012}}.
 
-\section*{Installing the package}
-On Windows, you can install the R package \texttt{diversitycompare} with the following command
+\section*{Installing the package \texttt{resamplediversity}}
+Our package has one dependency, a package called \texttt{adegenet}. On Windows, you can install 
+the package with the following command
 
 <<install_pkg, echo = TRUE, eval = FALSE>>=
 install.packages(file.choose(), repos = NULL)
 @
 
 whereupon a window will pop-up. You can now select the package binary (.zip). Instead of
-\texttt{file.choose()} you can specify a (full) path to the .zip file. Ultimately, you 
-can build from the \textbf{source} tarball on any operating system platform.
+\texttt{file.choose()} you can specify a (full) path to the .zip file. 
+If you are using R GUI, you can install by clicking \texttt{Packages > Install package(s) from local zip file}
+and navigate to the downloaded file (make sure you have \texttt{adegenet} installed). 
+Ultimately, you can build from the \textbf{source} tarball on any operating system platform. Source is
+available on request from package author (\texttt{tomaz.skrbinsek@gmail.com}) or 
+maintainer (\texttt{roman.lustrik@gmail.com}).
 
 \vspace{0.4cm}
 
-\noindent Contact the author if you have a problem installing the package.
+\noindent Contact us if you have a problem installing the package.
 
-<<toolchain, eval = FALSE, tidy = FALSE>>=
-install.packages(pkgs = "/diversitycompare.tar.gz",
-                 repos = NULL,
-                 type = "source")
-@
+% how to install if you have build tool chain ready
+%<<toolchain, eval = FALSE, tidy = FALSE>>=
+%install.packages(pkgs = "/diversitycompare.tar.gz",
+%                 repos = NULL,
+%                 type = "source")
+%@
+
+\section*{Analysis workflow}
 
 The Dinaric bears are used as the reference population. We can make a quick summary of the data and look at the loci that were used.
 <<eval = FALSE>>=
@@ -99,8 +111,9 @@ locNames(dinaric.genotypes)
 @
 
 Genetic diversity study of this population included samples of 50 individuals. We need to subset the locus panel using generic names of loci:
-<<look_genericLoci, echo = TRUE, eval = TRUE>>=
-loci_na <- c("L02", "L03", "L04", "L06", "L07", "L08", "L09", "L10")
+<<look_genericLoci, echo = TRUE, eval = TRUE, tidy = FALSE>>=
+loci_na <- c("L02", "L03", "L04", "L06", "L07",
+             "L08", "L09", "L10")
 @
 
 We will resample Dinaric genotypes multiple times to the same sample size that was used the Kluane population study (50 samples) using the sampe panel of loci to get comparable genetic diversity indices. This will take a while and produce a lot of relatively useless output from each subsample (omitted here)
@@ -127,7 +140,8 @@ calcDivRat(ref = 0.73, SEref = 0.026, obs = 0.76,
 We can see that allelic richness is 21\% higher in Kluane than in Dinaric Mountains, and heterozgosity 4\%.
 
 We can now batch-run the corrections for the entire set of North American populations studied 
-by Paetkau et al. using the same locus set: 
+by Paetkau et al. using the same locus set:
+
 <<napops, echo = TRUE, eval = TRUE, tidy = FALSE>>=
 na.pops <- bear.diversity[bear.diversity$Study == 1 | bear.diversity$Study == 2, ]
 @
@@ -141,6 +155,7 @@ print(xtable(na.pops, caption = "North American populations of brown bears studi
 The batch run will \textsc{take a long time} and produce a lot of useless output on screen. 
 I reduced the number of resamples (\texttt{nboots}) to 100 to keep the computation time reasonable.
 In a real study, you would want \texttt{nboots} to be at least 1000.
+
 <<resample_na, echo = TRUE, eval = FALSE, tidy = FALSE>>=
 adjusted_na <- runall(N = na.pops$N,
                       genotypes = dinaric.genotypes,
@@ -149,12 +164,17 @@ adjusted_na <- runall(N = na.pops$N,
 @
 
 \noident Results are presented below.
-<<print_na, echo = TRUE, eval = TRUE>>=
+<<print_na, echo = TRUE, eval = FALSE, tidy = FALSE>>=
 #these are resampled value for the reference population, hence prefix "ref".
-names(adjusted_na) <- paste("ref", names(adjusted_na), sep = "") 
+names(adjusted_na) <- paste("ref", names(adjusted_na),
+                            sep = "") 
 pops.adjusted_na <- cbind(na.pops, adjusted_na)
+@
+
+<<>>=
 pops.adjusted_na
 @
+
 
 % ne gre spravit tabele na eno normalno stran, je preširoka
 % bi moral razbit na več sub-data-frameov in vsakega posebej
@@ -176,10 +196,10 @@ Ar.na <- with(pops.adjusted_na,
               calcDivRat(ref = refA, SEref = refSEA, obs = A,
                          SEobs = SEA, type = "A"))
 Her.na <-  with(pops.adjusted_na,
-                calcDivRat(ref = refHe, SEref = refSEHe, obs = He,
-                           SEobs = SEHe, type = "He"))
-pops.adjusted_na <- cbind(adjusted_na, Ar.na, Her.na)
-pops.adjusted_na[, c("Population","Ar","SEAr","Her","SEHer")]
+                calcDivRat(ref = refHe, SEref = refSEHe,
+                           obs = He, SEobs = SEHe, type = "He"))
+pops.adjusted_na.out <- cbind(pops.adjusted_na, Ar.na, Her.na)
+pops.adjusted_na.out[, c("Population","Ar","SEAr","Her","SEHer")]
 @
 
 To compare Cantabrian bears to the populations in North America, we also calculate
@@ -195,20 +215,22 @@ adjusted_cant <- runall(N = cant.pops$N,
                         genotypes = dinaric.genotypes,
                         loci = loci_cant,
                         nboots = 100)
-names(adjusted_cant) <- paste("ref", names(adjusted_cant), sep = "")
+names(adjusted_cant) <- paste("ref", names(adjusted_cant),
+                              sep = "")
 pops.adjusted_cant <- cbind(cant.pops, adjusted_cant)
 
 Ar.cant <- with(pops.adjusted_cant,
                 calcDivRat(ref = refA, SEref = refSEA, obs = A,
                         SEobs = SEA, type = "A"))
 Her.cant <- with(pops.adjusted_cant,
-                 calcDivRat(ref = refHe, SEref = refSEHe, obs = He,
-                         SEobs = SEHe, type = "He"))
-pops.adjusted_cant <- cbind(adjusted_cant, Ar.cant, Her.cant)
+                 calcDivRat(ref = refHe, SEref = refSEHe,
+                            obs = He, SEobs = SEHe, type = "He"))
+pops.adjusted_cant.out <- cbind(pops.adjusted_cant, Ar.cant,
+                                Her.cant)
 
 pops.comparison <- rbind(
-          pops.adjusted_na,
-          pops.adjusted_cant)
+          pops.adjusted_na.out,
+          pops.adjusted_cant.out)
 
 pops.comparison[, c("Population","Ar","SEAr","Her","SEHer")]
 @
@@ -240,17 +262,18 @@ Only resampling reference population corrections are done. You can calculate Ar 
 \texttt{Nsamples\_usa} is a vector of the number of samples.
 
 <<usa1, eval = FALSE, tidy = FALSE>>=
-loci_usa <- c("L02", "L03", "L04", "L06",
+loci_nor <- c("L02", "L03", "L04", "L06",
               "L07", "L08", "L09", "L10")    
-Nsamples_usa <- c(28, 50, 119, 148, 40, 41, 55, 45,
+Nsamples_nor <- c(28, 50, 119, 148, 40, 41, 55, 45,
                   58, 30, 36, 57, 35, 34)  
-adjusted_usa <- runall(N = Nsamples_usa,
+adjusted_nor <- runall(N = Nsamples_nor,
                       genotypes = dinaric.genotypes,
-                      loci = loci_usa, nboots = 1000)
+                      loci = loci_nor,
+                      nboots = 1000)
 @
 
 <<usa2, echo = TRUE>>=
-adjusted_usa
+adjusted_nor
 @
 
 \subsection*{Scandinavia^{\cite{waits2000}}}
@@ -389,13 +412,8 @@ adjusted_gobi
 \bibitem{mccarthy2009} McCarthy TM, Waits LP, Mijiddorj B (2009). Status of the Gobi bear in Mongolia as determined by noninvasive genetic methods. Ursus 20(1): 30-38.
 \end{thebibliography}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tale del je tu zato, da izpiÅ¡e v katerem R-u se je delalo
-% kamot vrÅ¾eÅ¡ ven, bo Å¡e vedno delalo
 \newpage
 <<>>=
 sessionInfo()
 @
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \end{document}

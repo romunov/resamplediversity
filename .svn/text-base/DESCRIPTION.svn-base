@@ -1,7 +1,7 @@
 Package: resamplediversity
 Type: Package
 Title: Data and code: Reference population yardstick to calibrate and compare genetic diversity
-Version: 1.0-1
+Version: 1.0
 Date: 2012-07-02
 Depends: R(>= 2.14), methods
 Imports: adegenet
