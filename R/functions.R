@@ -33,9 +33,6 @@
 #loci = vector of generic locus names
 #nboots = number of bootstraps
 
-
-
-
 subsample.gen = function(genotypes, nboots = 1000, nsamps, loci) {
 #resampling routine to correct for unequal sampling / calculate allelic richness
 #in comparison of allelic richness between two populations
@@ -69,8 +66,8 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci) {
         gen.sample <- df2genind(gen.sample)
         # summary as of adegenet (=1.4.2) is not exported from its
         # namespace. we need to specify exactly where summary comes
-        # from by using :::
-        summ <- adegenet:::summary(gen.sample)
+        # from by using ::
+        summ <- adegenet::summary(gen.sample)
         Al = rbind(Al,mean(summ$loc.nall))
         SEAl = rbind(SEAl,sd(summ$loc.nall)/sqrt(length(summ$loc.nall)))
         Hex = rbind(Hex,mean(summ$Hexp))

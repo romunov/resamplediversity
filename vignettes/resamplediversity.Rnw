@@ -6,5 +6,5 @@
 \usepackage{hyperref} 
 \usepackage{pdfpages} 
 \begin{document} 
-\includepdf[pages=-, fitpaper = true]{vignette-source.pdf} 
+\includepdf[pages=-, fitpaper = true]{vignette-source} 
 \end{document} 

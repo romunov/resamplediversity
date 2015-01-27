@@ -2,9 +2,9 @@ Package: resamplediversity
 Type: Package
 Title: Data and code: Reference population yardstick to calibrate and compare genetic diversity
 Version: 1.0-1
-Date: 2012-07-02
+Date: 2015-01-27
 Depends: R(>= 2.14), methods
-Imports: adegenet
+Depends: adegenet
 Author: Tomaz Skrbinsek <tomaz.skrbinsek@gmail.com>
 Maintainer: Roman Lustrik <roman.lustrik@gmail.com>
 Description: This package contains data and code used in Skrbinsek T, Jelencic M, Waits LP, Potocnik H, Kos I, Trontelj P(2012) Using a reference population yardstick to calibrate and compare genetic diversity reported in different studies: an example from the brown bear. Heredity, In press.
