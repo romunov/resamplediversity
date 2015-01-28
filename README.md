@@ -20,3 +20,5 @@ Next you will probably want to look at the data and work flow used in the paper.
 # I don't know how to build from source
 
 Contact package maintainer at `roman.lustrik@biolitika.si` and you will get a fresh binary package (.zip file) that you'll be able to install through `install.packages()`.
+
+**Alternatively**, feel free to try package [`diveRsity`](http://cran.r-project.org/web/packages/diveRsity/index.html) ([or GitHub repository](https://github.com/kkeenan02/diveRsity)) which implements functionality in function `divRatio`.
