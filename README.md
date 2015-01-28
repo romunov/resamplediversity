@@ -7,7 +7,7 @@ The following package contains data and workflow used in paper by Skrbinšek, Je
 
 The package on this repository is in its "raw" form, often referred to as `source`. If you are on Linux/OSX or if you have [Rtools](http://cran.r-project.org/bin/windows/Rtools/) and LaTeX installed, you will have no problem building the package from source by hand. This has been made easy using package `devtools` using the following commands (assuming your buiild chain is in place):
 
-```
+```R
 library(devtools)
 install_github("romunov/resamplediversity")
 library(resamplediversity)
