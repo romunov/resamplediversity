@@ -49,8 +49,6 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci) {
 #Example: Smaller dataset of 17 samples, loci from "loci_usa" (see below), 1000 resamples,
 #     Dinaric bears used as a reference population:
 #test=subsample.gen(dinaric.genotypes,1000,17,loci_usa) 
-    browser()
-    
     ngens = length(genotypes@ind.names)
     Al = NULL
     SEAl = NULL
