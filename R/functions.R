@@ -49,6 +49,8 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci) {
 #Example: Smaller dataset of 17 samples, loci from "loci_usa" (see below), 1000 resamples,
 #     Dinaric bears used as a reference population:
 #test=subsample.gen(dinaric.genotypes,1000,17,loci_usa) 
+    browser()
+    
     ngens = length(genotypes@ind.names)
     Al = NULL
     SEAl = NULL
@@ -61,9 +63,9 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci) {
     for (i in 1:nboots){
         samp <- sample(1:ngens, nsamps, replace = TRUE)
         gen.sample <- genotypes[samp]
-        gen.sample <- genind2df(gen.sample)
+        gen.sample <- genind2df(gen.sample, sep = " ")
         row.names(gen.sample) <- 1:nsamps
-        gen.sample <- df2genind(gen.sample)
+        gen.sample <- df2genind(gen.sample, sep = " ")
         # summary as of adegenet (=1.4.2) is not exported from its
         # namespace. we need to specify exactly where summary comes
         # from by using ::
