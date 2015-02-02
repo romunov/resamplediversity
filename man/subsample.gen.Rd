@@ -8,7 +8,7 @@ Correct for unequal sampling / calculate allelic richness
 Resampling routine to correct for unequal sampling / calculate allelic richness in comparison of allelic richness between two populations~
 }
 \usage{
-subsample.gen(genotypes, nboots = 1000, nsamps, loci)
+subsample.gen(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE)
 }
 \arguments{
   \item{genotypes}{
@@ -22,6 +22,9 @@ Number of samples to use in each subsample - equal to the sample size in the com
 }
   \item{loci}{
 Subset of loci. Vector of generic locus names in the genotypes object c("L01","L03",...) common in both the reference and the compared populations.
+}
+  \item{verbose}{
+If \code{TRUE}, print summary for each iteration. Can be very verbose.
 }
 }
 

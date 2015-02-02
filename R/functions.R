@@ -32,8 +32,9 @@
 #genotypes = genind object of genotypes (adegenet package)
 #loci = vector of generic locus names
 #nboots = number of bootstraps
+# verbose = default FALSE, if TRUE, will print summary for each iteration
 
-subsample.gen = function(genotypes, nboots = 1000, nsamps, loci) {
+subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE) {
 #resampling routine to correct for unequal sampling / calculate allelic richness
 #in comparison of allelic richness between two populations
 #see: Leberg PL (2002) Estimating allelic richness: Effects of sample size and 
@@ -87,8 +88,12 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci) {
     SEHo = mean (SEHobs)
     #sdHo = sd (Hobs)
     out=data.frame(A,SEA,He,SEHe,Ho,SEHo)
-    print(genotypes$loc.names)
-    return(out)
+	
+    if (verbose == TRUE) {
+	    print(genotypes$loc.names)
+	}
+	
+    out
 }
 
 runall=function(N,genotypes,loci,nboots=1000) { 
