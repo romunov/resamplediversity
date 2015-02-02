@@ -62,7 +62,11 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
     for (i in 1:nboots){
         samp <- sample(1:ngens, nsamps, replace = TRUE)
         gen.sample <- genotypes[samp]
+        
+        sink("temp.txt")
         gen.sample <- suppressWarnings(genind2df(gen.sample, sep = " "))
+        sink(NULL)
+        
         row.names(gen.sample) <- 1:nsamps
         gen.sample <- suppressWarnings(df2genind(gen.sample, sep = " "))
         # summary as of adegenet (=1.4.2) is not exported from its
@@ -71,7 +75,7 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
         # We are forced to use sink() to catch print and cat statements.
         sink("temp.txt")
         summ <- adegenet::summary(gen.sample)
-        sink()
+        sink(NULL)
         
         Al = rbind(Al,mean(summ$loc.nall))
         SEAl = rbind(SEAl,sd(summ$loc.nall)/sqrt(length(summ$loc.nall)))
