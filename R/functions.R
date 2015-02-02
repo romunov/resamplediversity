@@ -59,16 +59,22 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
     SEHobs=NULL
     genotypes = genotypes[, loc=loci]
     
+    browser()
+    
     for (i in 1:nboots){
         samp <- sample(1:ngens, nsamps, replace = TRUE)
         gen.sample <- genotypes[samp]
-        gen.sample <- genind2df(gen.sample, sep = " ")
+        gen.sample <- suppressWarnings(genind2df(gen.sample, sep = " "))
         row.names(gen.sample) <- 1:nsamps
-        gen.sample <- df2genind(gen.sample, sep = " ")
+        gen.sample <- suppressWarnings(df2genind(gen.sample, sep = " "))
         # summary as of adegenet (=1.4.2) is not exported from its
         # namespace. we need to specify exactly where summary comes
         # from by using ::
+        # We are forced to use sink() to catch print and cat statements.
+        sink("temp.txt")
         summ <- adegenet::summary(gen.sample)
+        sink()
+        
         Al = rbind(Al,mean(summ$loc.nall))
         SEAl = rbind(SEAl,sd(summ$loc.nall)/sqrt(length(summ$loc.nall)))
         Hex = rbind(Hex,mean(summ$Hexp))
