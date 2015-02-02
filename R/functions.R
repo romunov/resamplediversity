@@ -59,8 +59,6 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
     SEHobs=NULL
     genotypes = genotypes[, loc=loci]
     
-    browser()
-    
     for (i in 1:nboots){
         samp <- sample(1:ngens, nsamps, replace = TRUE)
         gen.sample <- genotypes[samp]
