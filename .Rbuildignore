@@ -13,3 +13,5 @@ vignettes/bine.RData
 sandbox/
 hereditypaper.png
 README.md
+^.*\.Rproj$
+^\.Rproj\.user$
