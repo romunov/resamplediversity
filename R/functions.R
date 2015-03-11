@@ -77,29 +77,29 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
         summ <- adegenet::summary(gen.sample)
         sink(NULL)
         
-        Al = rbind(Al,mean(summ$loc.nall))
-        SEAl = rbind(SEAl,sd(summ$loc.nall)/sqrt(length(summ$loc.nall)))
-        Hex = rbind(Hex,mean(summ$Hexp))
-        SEHex = rbind(SEHex,sd(summ$Hexp)/sqrt(length(summ$Hexp)))
-        Hobs = rbind(Hobs,mean(summ$Hobs))
-        SEHobs = rbind(SEHobs,sd(summ$Hobs)/sqrt(length(summ$Hobs)))
+        Al <- rbind(Al, mean(summ$loc.nall))
+        SEAl <- rbind(SEAl, sd(summ$loc.nall)/sqrt(length(summ$loc.nall)))
+        Hex <- rbind(Hex, mean(summ$Hexp))
+        SEHex <- rbind(SEHex, sd(summ$Hexp)/sqrt(length(summ$Hexp)))
+        Hobs <- rbind(Hobs, mean(summ$Hobs))
+        SEHobs <- rbind(SEHobs, sd(summ$Hobs)/sqrt(length(summ$Hobs)))
     }
     #for
     #*** OUTPUTS
-    A=mean(Al) #mean number of alleles
-    SEA = mean(SEAl)
+    A <- mean(Al) #mean number of alleles
+    SEA <-  mean(SEAl)
     #sdA = sd(Al) #standard deviation of the number of alleles
-    He=mean(Hex) #mean expected heterozygosity
-    SEHe = mean (SEHex)
+    He <- mean(Hex) #mean expected heterozygosity
+    SEHe <- mean (SEHex)
     #sdHe = sd(Hex) #standard deviation of expected heterozygosity
-    Ho = mean (Hobs)
-    SEHo = mean (SEHobs)
+    Ho <- mean (Hobs)
+    SEHo <- mean (SEHobs)
     #sdHo = sd (Hobs)
-    out=data.frame(A,SEA,He,SEHe,Ho,SEHo)
+    out <- data.frame(A,SEA,He,SEHe,Ho,SEHo)
 	
     if (verbose == TRUE) {
 	    print(genotypes$loc.names)
-	}
+	  }
 	
     out
 }
