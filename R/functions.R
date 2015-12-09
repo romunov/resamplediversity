@@ -6,27 +6,27 @@
 
 #Description: Resampling routine to correct for unequal sampling / calculate allelic richness
 #in comparison of allelic richness between two populations
-#see: Leberg PL (2002) Estimating allelic richness: Effects of sample size and 
+#see: Leberg PL (2002) Estimating allelic richness: Effects of sample size and
 #     bottlenecks. Molecular Ecology, 11, 2445-2449.
 #SLOW! Be patient. Produces a lot of text as I don't know how to stop the summary
 #function of adegenet to print out every iteration.
 
 #Parameters:
-#genotypes = adegenet genotypes object of the larger sample 
+#genotypes = adegenet genotypes object of the larger sample
 #nboots = number of resamples (about 1000 should be ok, more doesn't hurt)
 #nsamps = number of samples in the smaller sample
 #loci = vector of generic (i.e. "L02") names of loci used in the bootstrap
 
 #Example: Smaller dataset of 17 samples, loci from "loci_usa" (see below), 1000 resamples,
 #		  Dinaric bears used as a reference population:
-#test=subsample.gen(dinaric.genotypes,1000,17,loci_usa) 
+#test=subsample.gen(dinaric.genotypes,1000,17,loci_usa)
 
 #--------------------------------------------------------
 
 #Function: runall
 #runall(N,genotypes,loci,nboots=1000)
 
-#Description: Runs corrections for unequal sampling for a subset of loci and 
+#Description: Runs corrections for unequal sampling for a subset of loci and
 #a vector of sample sizes.
 #N = vector of sample sizes
 #genotypes = genind object of genotypes (adegenet package)
@@ -37,20 +37,20 @@
 subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE) {
 #resampling routine to correct for unequal sampling / calculate allelic richness
 #in comparison of allelic richness between two populations
-#see: Leberg PL (2002) Estimating allelic richness: Effects of sample size and 
+#see: Leberg PL (2002) Estimating allelic richness: Effects of sample size and
 #     bottlenecks. Molecular Ecology, 11, 2445-2449.
 #SLOW! Be patient. Produces a lot of text as I don't know how to stop the summary
 #function of adegenet to print out every iteration.
-    
-#genotypes = adegenet genotypes object of the larger sample 
+
+#genotypes = adegenet genotypes object of the larger sample
 #nboots = number of resamples (about 1000 should be ok, more doesn't hurt)
 #nsamps = number of samples in the smaller sample
 #loci = vector of generic (i.e. "L02") names of loci used in the bootstrap
-    
+
 #Example: Smaller dataset of 17 samples, loci from "loci_usa" (see below), 1000 resamples,
 #     Dinaric bears used as a reference population:
-#test=subsample.gen(dinaric.genotypes,1000,17,loci_usa) 
-    ngens = length(genotypes@ind.names)
+#test=subsample.gen(dinaric.genotypes,1000,17,loci_usa)
+    ngens <- nInd(genotypes)
     Al = NULL
     SEAl = NULL
     Hex = NULL
@@ -58,27 +58,22 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
     Hobs = NULL
     SEHobs=NULL
     genotypes = genotypes[, loc=loci]
-    
+
     for (i in 1:nboots){
         samp <- sample(1:ngens, nsamps, replace = TRUE)
         gen.sample <- genotypes[samp]
-        
-        sink("temp.txt")
+
+        indNames(gen.sample) <- 1:nInd(gen.sample)
         gen.sample <- suppressWarnings(genind2df(gen.sample, sep = " "))
-        sink(NULL)
-        
-        row.names(gen.sample) <- 1:nsamps
+
         gen.sample <- suppressWarnings(df2genind(gen.sample, sep = " "))
         # summary as of adegenet (=1.4.2) is not exported from its
         # namespace. we need to specify exactly where summary comes
         # from by using ::
-        # We are forced to use sink() to catch print and cat statements.
-        sink("temp.txt")
-        summ <- adegenet::summary(gen.sample)
-        sink(NULL)
-        
-        Al <- rbind(Al, mean(summ$loc.nall))
-        SEAl <- rbind(SEAl, sd(summ$loc.nall)/sqrt(length(summ$loc.nall)))
+        summ <- adegenet::summary(gen.sample, verbose = FALSE)
+
+        Al <- rbind(Al, mean(summ$loc.n.all))
+        SEAl <- rbind(SEAl, sd(summ$loc.n.all)/sqrt(length(summ$loc.n.all)))
         Hex <- rbind(Hex, mean(summ$Hexp))
         SEHex <- rbind(SEHex, sd(summ$Hexp)/sqrt(length(summ$Hexp)))
         Hobs <- rbind(Hobs, mean(summ$Hobs))
@@ -96,15 +91,15 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
     SEHo <- mean (SEHobs)
     #sdHo = sd (Hobs)
     out <- data.frame(A,SEA,He,SEHe,Ho,SEHo)
-	
+
     if (verbose == TRUE) {
-	    print(genotypes$loc.names)
-	  }
-	
+        print(locNames(genotypes))
+    }
+
     out
 }
 
-runall=function(N,genotypes,loci,nboots=1000) { 
+runall=function(N,genotypes,loci,nboots=1000) {
     #Runs corrections for unequal sampling for a subset of loci and a vector of sample sizes
     #N = vector of sample sizes
     #genotypes = genind object of genotypes (adegenet package)
