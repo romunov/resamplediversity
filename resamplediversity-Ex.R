@@ -56,7 +56,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(dinaric.genotypes)
-summary(dinaric.genotypes)
+#summary(dinaric.genotypes)
 
 
 

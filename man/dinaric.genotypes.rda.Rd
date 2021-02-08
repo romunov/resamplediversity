@@ -15,13 +15,13 @@ Skrbinšek T, Jelenčič M, Waits L, Kos I, Jerina K, Trontelj P (2012). Monitor
 This present dataset doesn't have age data for the animals, but includes genotypes of three additional individuals for which we had no age data available.
 }
 \source{
-Skrbinšek T, Jelenčič M, Waits LP, Potočnik H, Kos I, Trontelj P(2012) Using a reference population yardstick to calibrate and compare genetic diversity reported in different studies: an example from the brown bear. Heredity, In press.
+Skrbinšek T, Jelenčič M, Waits LP, Potočnik H, Kos I, Trontelj P (2012) Using a reference population yardstick to calibrate and compare genetic diversity reported in different studies: an example from the brown bear. Heredity, In press.
 }
 \seealso{
 \link[adegenet:genind]{genind}
 }
 \examples{
 data(dinaric.genotypes)
-summary(dinaric.genotypes)
+# summary(dinaric.genotypes)
 }
 \keyword{datasets}

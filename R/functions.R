@@ -33,7 +33,9 @@
 #loci = vector of generic locus names
 #nboots = number of bootstraps
 # verbose = default FALSE, if TRUE, will print summary for each iteration
-
+#' @export
+#' @importFrom adegenet nInd nAll locNames "indNames<-" genind2df df2genind
+#' @importFrom stats sd
 subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE) {
 #resampling routine to correct for unequal sampling / calculate allelic richness
 #in comparison of allelic richness between two populations
@@ -51,13 +53,13 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
 #     Dinaric bears used as a reference population:
 #test=subsample.gen(dinaric.genotypes,1000,17,loci_usa)
     ngens <- nInd(genotypes)
-    Al = NULL
-    SEAl = NULL
-    Hex = NULL
-    SEHex = NULL
-    Hobs = NULL
-    SEHobs=NULL
-    genotypes = genotypes[, loc=loci]
+    Al <- NULL
+    SEAl <- NULL
+    Hex <- NULL
+    SEHex <- NULL
+    Hobs <- NULL
+    SEHobs <- NULL
+    genotypes <- genotypes[, loc = loci]
 
     for (i in 1:nboots){
         samp <- sample(1:ngens, nsamps, replace = TRUE)
@@ -72,8 +74,8 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
         # from by using ::
         summ <- adegenet::summary(gen.sample, verbose = FALSE)
 
-        Al <- rbind(Al, mean(summ$loc.n.all))
-        SEAl <- rbind(SEAl, sd(summ$loc.n.all)/sqrt(length(summ$loc.n.all)))
+        Al <- rbind(Al, mean(nAll(summ)))
+        SEAl <- rbind(SEAl, sd(nAll(summ))/sqrt(length(nAll(summ))))
         Hex <- rbind(Hex, mean(summ$Hexp))
         SEHex <- rbind(SEHex, sd(summ$Hexp)/sqrt(length(summ$Hexp)))
         Hobs <- rbind(Hobs, mean(summ$Hobs))
@@ -99,6 +101,7 @@ subsample.gen = function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE
     out
 }
 
+#' @export
 runall=function(N,genotypes,loci,nboots=1000) {
     #Runs corrections for unequal sampling for a subset of loci and a vector of sample sizes
     #N = vector of sample sizes
@@ -113,6 +116,7 @@ runall=function(N,genotypes,loci,nboots=1000) {
     return(as.data.frame(out))
 }
 
+#' @export
 calcDivRat = function (ref,SEref,obs,SEobs,type="U"){
     #ref=resampled reference population parameter
     #SEref = standard error of ref
