@@ -34,7 +34,7 @@
 # nboots = number of bootstraps
 # verbose = default FALSE, if TRUE, will print summary for each iteration
 #' @export
-#' @importFrom adegenet nInd nAll locNames "indNames<-" genind2df df2genind
+#' @importFrom adegenet nInd locNames "indNames<-" genind2df df2genind
 #' @importFrom stats sd
 subsample.gen <- function(genotypes, nboots = 1000, nsamps, loci, verbose = FALSE) {
   # resampling routine to correct for unequal sampling / calculate allelic richness
@@ -74,8 +74,8 @@ subsample.gen <- function(genotypes, nboots = 1000, nsamps, loci, verbose = FALS
     # from by using ::
     summ <- adegenet::summary(gen.sample, verbose = FALSE)
 
-    Al <- rbind(Al, mean(nAll(summ)))
-    SEAl <- rbind(SEAl, sd(nAll(summ)) / sqrt(length(nAll(summ))))
+    Al <- rbind(Al, mean(summ$loc.n.all))
+    SEAl <- rbind(SEAl, sd(summ$loc.n.all) / sqrt(length(summ$loc.n.all)))
     Hex <- rbind(Hex, mean(summ$Hexp))
     SEHex <- rbind(SEHex, sd(summ$Hexp) / sqrt(length(summ$Hexp)))
     Hobs <- rbind(Hobs, mean(summ$Hobs))
