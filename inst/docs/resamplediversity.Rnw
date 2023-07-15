@@ -1,7 +1,8 @@
+\documentclass{article}
+\usepackage{pdfpages}
 % \VignetteIndexEntry{Workflow in Comparing gene diversity Skrbinsek et al 2012}
 % \VignetteAuthor{Tomaž Skrbinšek}
 % \VignetteKeywords{gene, genetics} 
-\documentclass{article}
-\usepackage[utf8]{inputenc} 
 \begin{document}
+\includepdf[pages=-, fitpaper=true]{resamplediversity.pdf}
 \end{document}
